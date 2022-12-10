@@ -1,0 +1,112 @@
+Q 1]  48.Rotate Image (Leetcode Problem)
+Soln=>
+      *Approach :::---------------------------------------------------------------------------------------------------------------
+                  5   1  9  11 
+                  2   4  8  10
+                  13  3  6  7
+                  15  14 12 16
+            1] As we are given that we need to perfrom rotation of 90 degree of given matrix.This what that rotation would look 
+            like for the 4 corner values-5,11,15,16 this will be return as-
+                 15  1   9   5
+                 2   4   8   10
+                 13  3   6   7
+                 16  14  12  11
+            2]similarly for valus-1,10,13,12-
+                 15  13   9    5
+                 2   4    8    1
+                 13  3    6    7
+                 16  14   12   11
+            3]Now,for 2,9,7,14
+                 15  13  2   5
+                 14          1
+                 12          9
+                 16  7  10  11
+            4]over here we can see that our outer layer is being field in n-1 iterartion where n is length of matrix.we have 
+            completely done for outer part. now we have to go faor inner part as well over here we do the same inner values
+             we get the output that we needed.
+                 15  13  2   5
+                 14  3   4   1
+                 12  6   8   9
+                 16  7  10  11
+
+      * step by step:::----------------------------------------------------------------------------------------------------------
+
+      1] how many layer do we have So
+         no. of layer will be length of matrix divided by 2
+                layer = n/2;
+
+      2]            start     end
+                  5  !  1   9  !  11 
+            start----------------------
+                  2  !  4   8  !  10
+                  13 !  3   6  !  7
+            end------------------------
+                  15 !  14  12 !  16
+
+                  now for this inner layer my start point would be this so thai is given the layer no. and n point
+                  would be n-1 layer -1 beacuse n is 1 index and actual index of matrix is 0  index here so -1 and 
+                  the layer beacuse we are going to substract the same layer form these side as well.
+
+      3]          
+                  top = [start][i]
+                    --------->  
+              |   5   1  9  11  | 
+left= [n-1-i] |   2   4  8  10  |  right= [i][end]
+        [i]   |   13  3  6  7   |
+              |   15  14 12 16  |
+                    <--------    
+                    bottom [end][n-1-i]        
+            
+            3]above struture is explained here--
+
+            i) top one we can see that we are going to left to right so the iterartion form i that start till end so it wriiten 
+               as i over here
+                            top=[start][i];
+
+            ii) again for right we are moving to start till the end across the rows so i have written over here
+                            right = [i][end];
+
+            iii) for bottom one  it moving form last to first so last is n-1 and for the given boundary i also need to substract 
+                 the value of i to get the particular column i am on so that gives me (n-1-i)
+                            bottom = [end][n-1-i]; 
+
+            iv)  for left also it goes form lst tp first so the row would be n-1-i noq, after we have these formula we know that 
+                 the value of left would be get shift to top and top value shift to right and right value shift to bottom
+                 and bottom values shift to left.
+      
+      *code:::--------------------------------------------------------------------------------------------------------------------
+
+      class Solution
+{
+    public void rotate(int[][] matrix) 
+    {
+        int n = matrix.length;
+        int layers = n/2;
+
+        for(int layer = 0; layer < layers; layer++)
+        {
+            int start = layer;
+            int end = n - 1 - layer;
+
+            for(int i = start; i < end; i++)
+            {
+                // top in temp now,
+                int temp = matrix[start][i];
+                // left in top
+                matrix[start][i] = matrix[n-1-i][start];
+                // bottom in left
+                matrix[n-1-i][start] = matrix[end][n-1-i];
+                // right in bottom
+                matrix[end][n-1-i] = matrix[i][end];
+                // top in right
+                matrix[i][end] = temp;
+            }
+        }
+    }
+}
+
+TC = O(N*N)
+SP = O(1)
+
+
+     
